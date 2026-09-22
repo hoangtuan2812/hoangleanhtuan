@@ -2,7 +2,8 @@
 # Ảnh ghim theo digest. Múi giờ, locale và hạt giống cố định để hai lần chạy cho
 # cùng kết quả.
 
-SHELL := /bin/bash
+SHELL := cmd.exe
+PYTHON ?= python
 export TZ := Asia/Ho_Chi_Minh
 export LC_ALL := C.UTF-8
 export PYTHONHASHSEED := 0
@@ -21,24 +22,7 @@ help:
 	@echo "down             dọn môi trường"
 
 preflight:
-	@mkdir -p $(EVID)
-	@{ \
-	  echo "kien truc CPU: $$(uname -m)"; \
-	  echo "he dieu hanh : $$(uname -s)"; \
-	  echo "phien ban Python: $$(python3 --version 2>&1)"; \
-	  if command -v docker >/dev/null 2>&1; then \
-	    echo "phien ban Docker: $$(docker --version 2>&1)"; \
-	    if docker info >/dev/null 2>&1; then \
-	      echo "docker daemon: chay"; \
-	    else \
-	      echo "docker daemon: KHONG CHAY"; \
-	    fi; \
-	  else \
-	    echo "phien ban Docker: KHONG CO"; \
-	    echo "docker daemon: KHONG CHAY"; \
-	  fi; \
-	} > $(EVID)/preflight.txt
-	@cat $(EVID)/preflight.txt
+	@$(PYTHON) scripts/preflight.py
 	@echo
 	@echo "Đã ghi $(EVID)/preflight.txt"
 
@@ -52,13 +36,10 @@ defend:
 	@echo "Bài S1 không có phần phòng thủ bằng cấu hình. Sản phẩm của bài là mô hình đe dọa."
 
 verify:
-	python3 -m pytest tests/ -v --tb=short
+	$(PYTHON) -m pytest tests/ -v --tb=short
 
 export-evidence:
-	@mkdir -p $(EVID)
-	@$(MAKE) --no-print-directory preflight >/dev/null
-	@cd $(EVID) && sha256sum * > SHA256SUMS 2>/dev/null || true
-	@echo "Bằng chứng ở $(EVID), kèm SHA256SUMS."
+	@$(PYTHON) -c "from pathlib import Path; import hashlib; import os; root = Path('$(EVID)'); root.mkdir(parents=True, exist_ok=True); import subprocess; subprocess.run(['$(MAKE)', '--no-print-directory', 'preflight'], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL); digest_path = root / 'SHA256SUMS'; lines = []; for p in sorted(root.iterdir()): if p.name == 'SHA256SUMS': continue; h = hashlib.sha256(p.read_bytes()).hexdigest(); lines.append(f'{h}  {p.name}'); digest_path.write_text('\\n'.join(lines) + ('\\n' if lines else ''), encoding='utf-8'); print('Bằng chứng ở ' + str(root) + ', kèm SHA256SUMS.')"
 
 down:
 	-docker compose down -v --remove-orphans

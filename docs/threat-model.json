@@ -1,0 +1,103 @@
+{
+  "he_thong": "Hệ thống quản lý quy trình kho hàng và thanh toán nội bộ của công ty",
+  "thanh_phan": [
+    {
+      "ten": "Gateway API",
+      "vai_tro": "Tiếp nhận yêu cầu từ người dùng và chuyển tiếp tới dịch vụ xử lý dữ liệu"
+    },
+    {
+      "ten": "Ứng dụng web",
+      "vai_tro": "Hiển thị màn hình thao tác và thực hiện xác thực người dùng trên trình duyệt"
+    },
+    {
+      "ten": "Cơ sở dữ liệu nghiệp vụ",
+      "vai_tro": "Lưu trữ hồ sơ hàng hóa, phiên giao dịch và dữ liệu tài khoản phân quyền"
+    }
+  ],
+  "moi_de_doa": [
+    {
+      "ma": "M01",
+      "phat_bieu": "Kẻ tấn công có thể chiếm quyền truy cập nếu API không kiểm tra tính hợp lệ của token và không xác thực quyền theo từng yêu cầu trước khi thực thi.",
+      "nguyen_ly": 1,
+      "attack": "T1190",
+      "tac_dong": 5,
+      "kha_nang": 4
+    },
+    {
+      "ma": "M02",
+      "phat_bieu": "Một người dùng lạ có thể đánh cắp phiên làm việc nếu trình duyệt lưu cookie mà không đặt thuộc tính HttpOnly và Secure ở mọi endpoints nhạy cảm.",
+      "nguyen_ly": 2,
+      "attack": "T1552",
+      "tac_dong": 4,
+      "kha_nang": 4
+    },
+    {
+      "ma": "M03",
+      "phat_bieu": "Kẻ tấn công có thể đọc toàn bộ dữ liệu kho nếu câu lệnh SQL được hợp thành từ đầu vào người dùng mà không có ràng buộc tham số hóa và kiểm tra kiểu dữ liệu.",
+      "nguyen_ly": 3,
+      "attack": "T1190",
+      "tac_dong": 5,
+      "kha_nang": 5
+    },
+    {
+      "ma": "M04",
+      "phat_bieu": "Một kẻ brute force có thể đoán mật khẩu nếu hệ thống không giới hạn số lần thử và không hoãn truy cập sau các lần đăng nhập thất bại liên tiếp.",
+      "nguyen_ly": 4,
+      "attack": "T1110",
+      "tac_dong": 4,
+      "kha_nang": 5
+    },
+    {
+      "ma": "M05",
+      "phat_bieu": "Một tài khoản không được phép có thể nâng quyền nếu kiểm tra phân quyền chỉ thực hiện trên giao diện người dùng và không được xác nhận lại ở phía server.",
+      "nguyen_ly": 5,
+      "attack": "T1078",
+      "tac_dong": 4,
+      "kha_nang": 4
+    },
+    {
+      "ma": "M06",
+      "phat_bieu": "Mã độc có thể cài đặt backdoor nếu endpoint tải lên không kiểm tra loại tệp, kích thước và chữ ký gốc trước khi lưu vào hệ thống.",
+      "nguyen_ly": 6,
+      "attack": "T1204",
+      "tac_dong": 5,
+      "kha_nang": 3
+    },
+    {
+      "ma": "M07",
+      "phat_bieu": "Đối phương có thể khai thác khóa bí mật nếu biến môi trường và file cấu hình chứa thông tin nhạy cảm bị lưu trong kho mã nguồn hoặc tài liệu công khai.",
+      "nguyen_ly": 7,
+      "attack": "T1552",
+      "tac_dong": 5,
+      "kha_nang": 4
+    },
+    {
+      "ma": "M08",
+      "phat_bieu": "Một người ngoài có thể sửa nhật ký giao dịch nếu hệ thống không kiểm soát quyền ghi và không xác minh tính toàn vẹn dữ liệu trước khi lưu xuống cơ sở dữ liệu.",
+      "nguyen_ly": 2,
+      "attack": "T1565.001",
+      "tac_dong": 3,
+      "kha_nang": 4
+    }
+  ],
+  "chon_xu_ly": [
+    {
+      "ma": "M03",
+      "chi_phi": 1800.0,
+      "don_vi": "triệu đồng",
+      "can_cu": "Dựa trên thời gian sửa 2 tuần, thêm ràng buộc tham số hóa và kiểm thử bảo mật cơ sở dữ liệu."
+    },
+    {
+      "ma": "M04",
+      "chi_phi": 950.5,
+      "don_vi": "triệu đồng",
+      "can_cu": "Dựa trên việc triển khai giới hạn lần thử, khóa tạm thời và cảnh báo truy cập bất thường trong 3 ngày."
+    },
+    {
+      "ma": "M07",
+      "chi_phi": 420.0,
+      "don_vi": "triệu đồng",
+      "can_cu": "Dựa trên chi phí xoá dữ liệu nhạy cảm và áp dụng quản lý bí mật trong môi trường phát triển."
+    }
+  ]
+}
